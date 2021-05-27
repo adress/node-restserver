@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const { dbConnection } = require('../database/config')
 
 class Server {
 
@@ -10,12 +11,21 @@ class Server {
         //prefijo ruta de usuarios
         this.usuariosPath = '/api/usuarios'; //prefijo de la ruta de usuarios
 
+        //conexion con la base de datos
+        this.conectardb();
+
         // ejecuta el metodo que configura los Middlewares
         this.middlewares();
 
         //ejecuta el metodo que configura las rutas en app
         this.routes();
     }
+
+    //conexion con la base de datos
+    async conectardb() {
+        await dbConnection();
+    }
+
 
     middlewares() {
         //.use indica que son middlewares
@@ -34,7 +44,7 @@ class Server {
     routes() {
         //routes import
         //this.app.use(require('../routes/user'));
-        this.app.use(this.usuariosPath, require('../routes/usuarios'))
+        this.app.use(this.usuariosPath, require('../routes/usuariosRoute'))
     }
 
     //up server

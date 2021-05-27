@@ -1,15 +1,14 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-let Schema = mongoose.Schema;
-
-let usuarioSchema = new Schema({
+const UsuarioSchema = new Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es necesario'],
     },
-    email: {
+    correo: {
         type: String,
-        required: [true, 'El email es necesario'],
+        required: [true, 'El coreo es necesario'],
+        unique: true
     },
     password: {
         type: String,
@@ -17,11 +16,11 @@ let usuarioSchema = new Schema({
     },
     img: {
         type: String,
-        required: false,
     },
-    role: {
+    rol: {
         type: String,
-        required: [true, ' es necesario'],
+        required: [true, 'el rol es necesario'],
+        enum: ['ADMIN_ROLE', 'USER_ROLE'],
         default: 'USER_ROLE',
     },
     estado: {
@@ -34,4 +33,14 @@ let usuarioSchema = new Schema({
     },
 });
 
-module.exports = mongoose.model('Usuario', usuarioSchema);
+//Ocutlar argumentos del schema
+//se una funcion normal ya que se usa el objeto this
+UsuarioSchema.methods.toJSON = function() {
+    //quita el __v y el password al realizar .toObject
+    const { __v, password, ...usuario } = this.toObject();
+    return usuario;
+}
+
+//la funcion model recibe nombre del modelo y el modelo, por defecto mongose 
+//agrega la s al modelo enotnces el modelo quedara con el nombre modelos
+module.exports = model('Usuario', UsuarioSchema)
