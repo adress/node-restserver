@@ -10,6 +10,7 @@ class Server {
         this.port = process.env.PORT; //guarda el numero del puerto de la variable global process.env
         //prefijo ruta de usuarios
         this.usuariosPath = '/api/usuarios'; //prefijo de la ruta de usuarios
+        this.authPath = '/api/auth';
 
         //conexion con la base de datos
         this.conectardb();
@@ -44,6 +45,7 @@ class Server {
     routes() {
         //routes import
         //this.app.use(require('../routes/user'));
+        this.app.use(this.authPath, require('../routes/authRoute'))
         this.app.use(this.usuariosPath, require('../routes/usuariosRoute'))
     }
 

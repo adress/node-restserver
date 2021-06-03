@@ -20,7 +20,7 @@ const UsuarioSchema = new Schema({
     rol: {
         type: String,
         required: [true, 'el rol es necesario'],
-        enum: ['ADMIN_ROLE', 'USER_ROLE'],
+        enum: ['ADMIN_ROLE', 'USER_ROLE', 'VENTAS_ROLE'],
         default: 'USER_ROLE',
     },
     estado: {
@@ -37,7 +37,11 @@ const UsuarioSchema = new Schema({
 //se una funcion normal ya que se usa el objeto this
 UsuarioSchema.methods.toJSON = function() {
     //quita el __v y el password al realizar .toObject
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+
+    //cambiar el _id por el _uid
+    usuario.uid = _id;
+
     return usuario;
 }
 
