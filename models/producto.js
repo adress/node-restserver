@@ -32,6 +32,9 @@ const ProductoSchema = Schema({
         ref: 'Categoria',
         required: [true, 'la categoria es obligatoria']
     },
+    img: {
+        type: String,
+    },
 
 });
 

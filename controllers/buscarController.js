@@ -30,7 +30,6 @@ const buscarUsuarios = async(termino = '', res = response) => {
     return res.json({
         results: usuarios
     });
-
 }
 
 

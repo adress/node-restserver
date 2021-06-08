@@ -1,6 +1,7 @@
-const express = require('express')
-const cors = require('cors')
-const { dbConnection } = require('../database/config')
+const express = require('express');
+const cors = require('cors');
+const { dbConnection } = require('../database/config');
+const fileUpload = require('express-fileupload');
 
 class Server {
 
@@ -16,7 +17,8 @@ class Server {
             categorias: '/api/categorias',
             productos: '/api/productos',
             usuarios: '/api/usuarios',
-        }
+            upload: '/api/upload'
+        };
 
         //conexion con la base de datos
         this.conectardb();
@@ -46,16 +48,24 @@ class Server {
 
         //middleware define la carpeta publica
         this.app.use(express.static('public'))
+
+        //carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
 
     routes() {
         //routes import
         //this.app.use(require('../routes/user'));
-        this.app.use(this.paths.auth, require('../routes/authRoute'))
-        this.app.use(this.paths.buscar, require('../routes/buscarRoute'))
-        this.app.use(this.paths.categorias, require('../routes/categoriasRoute'))
-        this.app.use(this.paths.productos, require('../routes/productosRoute'))
-        this.app.use(this.paths.usuarios, require('../routes/usuariosRoute'))
+        this.app.use(this.paths.auth, require('../routes/authRoute'));
+        this.app.use(this.paths.buscar, require('../routes/buscarRoute'));
+        this.app.use(this.paths.categorias, require('../routes/categoriasRoute'));
+        this.app.use(this.paths.productos, require('../routes/productosRoute'));
+        this.app.use(this.paths.upload, require('../routes/uploadRoute'));
+        this.app.use(this.paths.usuarios, require('../routes/usuariosRoute'));
     }
 
     //up server
